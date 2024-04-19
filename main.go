@@ -31,8 +31,8 @@ func main() {
 	if err := commmandRun.Start(); err != nil {
 		log.Log(log.LogData{
 			Level: "error",
-			Func:  "Running",
-			Data:  "Running command failed",
+			Func:  "Start",
+			Data:  "Start command failed : " + err.Error(),
 		})
 		return
 	}
@@ -40,7 +40,7 @@ func main() {
 		log.Log(log.LogData{
 			Level: "error",
 			Func:  "Running",
-			Data:  "Running command failed",
+			Data:  "Running command failed : " + err.Error(),
 		})
 		return
 	}
