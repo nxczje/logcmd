@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"os"
 	"os/exec"
 	"strings"
@@ -25,7 +24,6 @@ func main() {
 	})
 	file, _ := os.OpenFile(pty, os.O_WRONLY, os.ModeAppend)
 	commmandRun := exec.Command(arrcmd[0], arrcmd[1:]...)
-	fmt.Println(commmandRun.String())
 	commmandRun.Stdout = file
 	commmandRun.Stderr = file
 	if err := commmandRun.Start(); err != nil {
