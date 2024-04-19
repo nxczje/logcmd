@@ -1,28 +1,31 @@
 package main
 
 import (
+	"fmt"
 	"os"
 	"os/exec"
+	"strings"
 
 	"github.com/nxczje/logcmd/log"
 )
 
 func main() {
-	cmd := os.Args[1]
-	pty := os.Args[2]
+	pty := os.Args[1]
+	cmds := os.Args[2:]
 	log.Banner()
 	arrcmd := []string{
 		"bash",
 		"-c",
-		cmd,
 	}
+	arrcmd = append(arrcmd, strings.Join(cmds, " "))
 	log.Log(log.LogData{
 		Level: "info",
 		Func:  "Pending",
-		Data:  "Command : " + cmd,
+		Data:  "Command : " + strings.Join(cmds, " "),
 	})
 	file, _ := os.OpenFile(pty, os.O_WRONLY, os.ModeAppend)
 	commmandRun := exec.Command(arrcmd[0], arrcmd[1:]...)
+	fmt.Println(commmandRun.String())
 	commmandRun.Stdout = file
 	commmandRun.Stderr = file
 	if err := commmandRun.Start(); err != nil {
