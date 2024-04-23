@@ -1,9 +1,12 @@
 package main
 
 import (
+	"fmt"
 	"os"
 	"os/exec"
+	"os/signal"
 	"strings"
+	"syscall"
 
 	"github.com/nxczje/logcmd/log"
 )
@@ -11,6 +14,21 @@ import (
 func main() {
 	pty := os.Args[1]
 	cmds := os.Args[2:]
+	pid := 0
+	go func() {
+		interrupt := make(chan os.Signal, 1)
+		signal.Notify(interrupt, os.Interrupt, syscall.SIGINT)
+		<-interrupt
+		fmt.Println("\n")
+		log.Log(log.LogData{
+			Level: "warn",
+			Func:  "Interrupt",
+			Data:  "Cancel command",
+		})
+		if pid != 0 {
+			syscall.Kill(pid, syscall.SIGINT)
+		}
+	}()
 	log.Banner()
 	arrcmd := []string{
 		"bash",
@@ -34,6 +52,7 @@ func main() {
 		})
 		return
 	}
+	pid = commmandRun.Process.Pid
 	if err := commmandRun.Wait(); err != nil {
 		log.Log(log.LogData{
 			Level: "error",
