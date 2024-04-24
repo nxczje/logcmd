@@ -19,7 +19,7 @@ func main() {
 		interrupt := make(chan os.Signal, 1)
 		signal.Notify(interrupt, os.Interrupt, syscall.SIGINT)
 		<-interrupt
-		fmt.Println("\n")
+		fmt.Println()
 		log.Log(log.LogData{
 			Level: "warn",
 			Func:  "Interrupt",
